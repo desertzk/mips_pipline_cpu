@@ -21,3 +21,10 @@ word& registers::operator[](int i){
   dummy = 0;
   return dummy;
 }
+
+std::ostream& operator<<(std::ostream&  os, const registers& reg)
+{
+	
+	
+	return os;
+}

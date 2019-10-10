@@ -28,6 +28,10 @@ public:
   void reg_s();
 private:
   void execute  (const instruction& inst);
+  void IF();//IFetch
+  void ID();//Idecode
+  void EX();//Execute
+  void Mem();//MemAccess  void WB();//WriteBack
   void execute_r(const instruction& inst);
   void execute_i(const instruction& inst);
   void execute_j(const instruction& inst);

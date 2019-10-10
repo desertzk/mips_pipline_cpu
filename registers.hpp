@@ -1,7 +1,7 @@
 #ifndef REGISTERS_HPP
 #define REGISTERS_HPP
 #include <cstdint>
-
+#include <iostream>
 using word = uint32_t;
 
 class registers{
@@ -14,5 +14,7 @@ public:
   void set(int i, word data);
   word& operator[](int i);
 };
+
+std::ostream& operator<<(std::ostream&  os, const registers& reg);
 
 #endif

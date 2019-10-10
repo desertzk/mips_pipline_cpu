@@ -4,6 +4,20 @@
 #include "instruction.hpp"
 
 using word = uint32_t;
+using namespace std;
+
+std::ostream& operator<<(std::ostream&  os, const instruction& instr)
+{
+	std::string binstr = instr.bin.to_string();
+	if (instr.type == 'r')
+		os << "R   " << "opcode:" << binstr.substr(0, 6) << "rs:" << binstr.substr(6, 5) << "rt:" << binstr.substr(11, 5) << "rd:" << binstr.substr(16, 5) << "shamt:" << binstr.substr(21, 5) << "funct:" << binstr.substr(26, 6) << "  ";
+	else if (instr.type == 'i')
+		os << "I   " << "opcode:" << binstr.substr(0, 6) << "rs:" << binstr.substr(6, 5) << "rt:" << binstr.substr(11, 5) << "address offset:" << binstr.substr(16, 16) <<"i_imi" << instr.i_imi << "  ";
+	else
+		os << "J   " << "opcode:" << binstr.substr(0, 6) << "target address:"<<binstr.substr(6,26);
+	return os;
+}
+
 
 instruction::instruction(){
   opcode = 0;

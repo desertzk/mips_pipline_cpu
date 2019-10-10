@@ -3,6 +3,7 @@
 #include <iostream>
 #include <cstdint>    //using
 #include<bitset>
+#include<string>
 using word = uint32_t;
 
 class instruction{
@@ -23,10 +24,7 @@ private:
   bool is_J_type(int opcode);
 };
 
-std::ostream& operator<<(std::ostream&  os,const instruction& instr)
-{
-	os << "opcode:" << "src_s:" << "src_t:" << "destn:"<<"shamt:" <<"funct:"<< "i_imi"<<"j_add"<< "type";
-}
+std::ostream& operator<<(std::ostream&  os, const instruction& instr);
 
 
 #endif

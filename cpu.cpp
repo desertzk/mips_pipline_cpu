@@ -42,6 +42,7 @@ void cpu::pc_increase(word offset){
 }
 
 void cpu::execute(const instruction& inst){
+	cout << inst;
   switch(inst.type){
     case 'r': execute_r(inst); break;
     case 'i': execute_i(inst); break;
@@ -51,32 +52,33 @@ void cpu::execute(const instruction& inst){
 }
 
 void cpu::execute_r(const instruction& inst){
+	
   switch (inst.funct){
-    case 0x00: cout<<"SLL"<<endl; SLL(inst); break;  //rs
-    case 0x02: cout<<"SRL"<<endl; SRL(inst); break;  //rs
-    case 0x03: cout<<"SRA"<<endl; SRA(inst); break;  //rs
-    case 0x04: cout<<"SLLV"<<endl; SLLV(inst); break; // TODO: dodalem to nie wiem czy gdzies jescze trzeba cos zmienic
-    case 0x06: cout<<"SRLV"<<endl; SRLV(inst); break;
-    case 0x07: cout<<"SRAV"<<endl; SRAV(inst); break; //shamt
-    case 0x08: cout<<"JR"<<endl; JR(inst); break;   //rt,rd
-    case 0x09: cout<<"JALR"<<endl; JALR(inst); break; //rt
-    case 0x10: cout<<"MFHI"<<endl; MFHI(inst); break; //rs,rt
-    case 0x11: cout<<"MTHI"<<endl; MTHI(inst); break; //rt,rd,shamt
-    case 0x12: cout<<"MFLO"<<endl; MFLO(inst); break; //rs,rt
-    case 0x13: cout<<"MTLO"<<endl; MTLO(inst); break; //rt,rd,shamt
-    case 0x18: cout<<"MULT"<<endl; MULT(inst); break; //rd,shamt
+    case 0x00: cout<<"SLL"  <<endl; SLL(inst); break;  //rs
+    case 0x02: cout<<"SRL"  <<endl; SRL(inst); break;  //rs
+    case 0x03: cout<<"SRA"  <<endl; SRA(inst); break;  //rs
+    case 0x04: cout<<"SLLV" <<endl; SLLV(inst); break; // TODO: dodalem to nie wiem czy gdzies jescze trzeba cos zmienic
+    case 0x06: cout<<"SRLV" <<endl; SRLV(inst); break;
+    case 0x07: cout<<"SRAV" <<endl; SRAV(inst); break; //shamt
+    case 0x08: cout<<"JR"   <<endl; JR(inst); break;   //rt,rd
+    case 0x09: cout<<"JALR" <<endl; JALR(inst); break; //rt
+    case 0x10: cout<<"MFHI" <<endl; MFHI(inst); break; //rs,rt
+    case 0x11: cout<<"MTHI" <<endl; MTHI(inst); break; //rt,rd,shamt
+    case 0x12: cout<<"MFLO" <<endl; MFLO(inst); break; //rs,rt
+    case 0x13: cout<<"MTLO" <<endl; MTLO(inst); break; //rt,rd,shamt
+    case 0x18: cout<<"MULT" <<endl; MULT(inst); break; //rd,shamt
     case 0x19: cout<<"MULTU"<<endl; MULTU(inst); break; //rd,shamt
-    case 0x1A: cout<<"DIV"<<endl; DIV(inst); break; //rd,shamt
-    case 0x1B: cout<<"DIVU"<<endl; DIVU(inst); break; //rd,shamt
-    case 0x20: cout<<"ADD"<<endl; ADD(inst); break;  //shamt
-    case 0x21: cout<<"ADDU"<<endl; ADDU(inst); break; //shamt
-    case 0x22: cout<<"SUB"<<endl; SUB(inst); break; //shamt
-    case 0x23: cout<<"SUBU"<<endl; SUBU(inst); break; //shamt
-    case 0x24: cout<<"AND"<<endl; AND(inst); break; //shamt
-    case 0x25: cout<<"OR"<<endl; OR(inst); break; //shamt
-    case 0x26: cout<<"XOR"<<endl; XOR(inst); break; //shamt
-    case 0x2A: cout<<"SLT"<<endl; SLT(inst); break; //shamt
-    case 0x2B: cout<<"SLTU"<<endl; SLTU(inst); break; //shamt
+    case 0x1A: cout<<"DIV"  <<endl; DIV(inst); break; //rd,shamt
+    case 0x1B: cout<<"DIVU" <<endl; DIVU(inst); break; //rd,shamt
+    case 0x20: cout<<"ADD"  <<endl; ADD(inst); break;  //shamt
+    case 0x21: cout<<"ADDU" <<endl; ADDU(inst); break; //shamt
+    case 0x22: cout<<"SUB"  <<endl; SUB(inst); break; //shamt
+    case 0x23: cout<<"SUBU" <<endl; SUBU(inst); break; //shamt
+    case 0x24: cout<<"AND"  <<endl; AND(inst); break; //shamt
+    case 0x25: cout<<"OR"   <<endl; OR(inst); break; //shamt
+    case 0x26: cout<<"XOR"  <<endl; XOR(inst); break; //shamt
+    case 0x2A: cout<<"SLT"  <<endl; SLT(inst); break; //shamt
+    case 0x2B: cout<<"SLTU" <<endl; SLTU(inst); break; //shamt
 
     default: std::cerr << "error: r instruction not implemented" << '\n'; std::exit(-12);
   }
@@ -134,8 +136,10 @@ word cpu::sign_extend_imi(const instruction& inst){
 
 // INSTRUCTIONS
 void cpu::ADD(const instruction& inst){
+  //id
   s_word r1 = r[inst.src_s];
   s_word r2 = r[inst.src_t];
+  //ex
   s_word res = r1 + r2;
 
   if((res < 0 && r1 >= 0 && r2 >= 0)||(res >= 0 && r1 < 0 && r2 < 0)){
