@@ -25,8 +25,7 @@ cpu::cpu(std::string binary): m(binary), r() {
 
 void cpu::run(){
   while(true) {
-    word next_instruction = m.read_inst(pc);
-    instruction c_inst(next_instruction);
+	  this->IF();
 
     this->execute(c_inst);
 
@@ -49,6 +48,29 @@ void cpu::execute(const instruction& inst){
     case 'j': execute_j(inst); break;
     default: std::cerr << "error: incorect instruction type" ;std::exit(-20);
   }
+}
+
+void cpu::IF()
+{
+	word next_instruction = m.read_inst(pc);
+	
+}
+
+void cpu::ID(word next_instruction)
+{
+	instruction c_inst(next_instruction);
+}
+
+void cpu::EX()
+{
+}
+
+void cpu::Mem()
+{
+}
+
+void cpu::WB()
+{
 }
 
 void cpu::execute_r(const instruction& inst){

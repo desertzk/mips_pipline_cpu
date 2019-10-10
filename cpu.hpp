@@ -29,7 +29,7 @@ public:
 private:
   void execute  (const instruction& inst);
   void IF();//IFetch
-  void ID();//Idecode
+  void ID(word next_instruction);//Idecode
   void EX();//Execute
   void Mem();//MemAccess  void WB();//WriteBack
   void execute_r(const instruction& inst);
