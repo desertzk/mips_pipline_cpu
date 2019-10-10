@@ -16,7 +16,7 @@ instruction::instruction(){
   j_add = 0;
 }
 
-instruction::instruction(word inst){
+instruction::instruction(word inst):bin(inst){
   opcode = inst >> 26;
   if(is_R_type(opcode)){
     type = 'r';

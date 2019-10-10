@@ -7,6 +7,7 @@
 
 using word = uint32_t;
 using s_word = int32_t;
+using namespace std;
 
 cpu::cpu(){
   pc = 0x10000000;
@@ -51,31 +52,31 @@ void cpu::execute(const instruction& inst){
 
 void cpu::execute_r(const instruction& inst){
   switch (inst.funct){
-    case 0x00: SLL(inst); break;  //rs
-    case 0x02: SRL(inst); break;  //rs
-    case 0x03: SRA(inst); break;  //rs
-    case 0x04: SLLV(inst); break; // TODO: dodalem to nie wiem czy gdzies jescze trzeba cos zmienic
-    case 0x06: SRLV(inst); break;
-    case 0x07: SRAV(inst); break; //shamt
-    case 0x08: JR(inst); break;   //rt,rd
-    case 0x09: JALR(inst); break; //rt
-    case 0x10: MFHI(inst); break; //rs,rt
-    case 0x11: MTHI(inst); break; //rt,rd,shamt
-    case 0x12: MFLO(inst); break; //rs,rt
-    case 0x13: MTLO(inst); break; //rt,rd,shamt
-    case 0x18: MULT(inst); break; //rd,shamt
-    case 0x19: MULTU(inst); break; //rd,shamt
-    case 0x1A: DIV(inst); break; //rd,shamt
-    case 0x1B: DIVU(inst); break; //rd,shamt
-    case 0x20: ADD(inst); break;  //shamt
-    case 0x21: ADDU(inst); break; //shamt
-    case 0x22: SUB(inst); break; //shamt
-    case 0x23: SUBU(inst); break; //shamt
-    case 0x24: AND(inst); break; //shamt
-    case 0x25: OR(inst); break; //shamt
-    case 0x26: XOR(inst); break; //shamt
-    case 0x2A: SLT(inst); break; //shamt
-    case 0x2B: SLTU(inst); break; //shamt
+    case 0x00: cout<<"SLL"<<endl; SLL(inst); break;  //rs
+    case 0x02: cout<<"SRL"<<endl; SRL(inst); break;  //rs
+    case 0x03: cout<<"SRA"<<endl; SRA(inst); break;  //rs
+    case 0x04: cout<<"SLLV"<<endl; SLLV(inst); break; // TODO: dodalem to nie wiem czy gdzies jescze trzeba cos zmienic
+    case 0x06: cout<<"SRLV"<<endl; SRLV(inst); break;
+    case 0x07: cout<<"SRAV"<<endl; SRAV(inst); break; //shamt
+    case 0x08: cout<<"JR"<<endl; JR(inst); break;   //rt,rd
+    case 0x09: cout<<"JALR"<<endl; JALR(inst); break; //rt
+    case 0x10: cout<<"MFHI"<<endl; MFHI(inst); break; //rs,rt
+    case 0x11: cout<<"MTHI"<<endl; MTHI(inst); break; //rt,rd,shamt
+    case 0x12: cout<<"MFLO"<<endl; MFLO(inst); break; //rs,rt
+    case 0x13: cout<<"MTLO"<<endl; MTLO(inst); break; //rt,rd,shamt
+    case 0x18: cout<<"MULT"<<endl; MULT(inst); break; //rd,shamt
+    case 0x19: cout<<"MULTU"<<endl; MULTU(inst); break; //rd,shamt
+    case 0x1A: cout<<"DIV"<<endl; DIV(inst); break; //rd,shamt
+    case 0x1B: cout<<"DIVU"<<endl; DIVU(inst); break; //rd,shamt
+    case 0x20: cout<<"ADD"<<endl; ADD(inst); break;  //shamt
+    case 0x21: cout<<"ADDU"<<endl; ADDU(inst); break; //shamt
+    case 0x22: cout<<"SUB"<<endl; SUB(inst); break; //shamt
+    case 0x23: cout<<"SUBU"<<endl; SUBU(inst); break; //shamt
+    case 0x24: cout<<"AND"<<endl; AND(inst); break; //shamt
+    case 0x25: cout<<"OR"<<endl; OR(inst); break; //shamt
+    case 0x26: cout<<"XOR"<<endl; XOR(inst); break; //shamt
+    case 0x2A: cout<<"SLT"<<endl; SLT(inst); break; //shamt
+    case 0x2B: cout<<"SLTU"<<endl; SLTU(inst); break; //shamt
 
     default: std::cerr << "error: r instruction not implemented" << '\n'; std::exit(-12);
   }
@@ -86,42 +87,42 @@ void cpu::execute_i(const instruction& inst){
   switch (inst.opcode){
     case 0x01: { //branches
       switch (inst.src_t){
-        case 0x00: BLTZ(inst); break;
-        case 0x01: BGEZ(inst); break;
-        case 0x10: BLTZAL(inst); break;
-        case 0x11: BGEZAL(inst); break;
+        case 0x00:cout<<"BLTZ"<<endl; BLTZ(inst); break;
+        case 0x01:cout<<"BGEZ"<<endl; BGEZ(inst); break;
+        case 0x10:cout<<"BLTZAL"<<endl; BLTZAL(inst); break;
+        case 0x11:cout<<"BGEZAL"<<endl; BGEZAL(inst); break;
         default: std::cerr << "error: i instruction not implemented" << '\n'; std::exit(-12);
       }
      } break;
-    case 0x04: BEQ(inst); break;
-    case 0x05: BNE(inst); break;
-    case 0x06: BLEZ(inst); break; //rt
-    case 0x07: BGTZ(inst); break; //rt
-    case 0x08: ADDI(inst); break;
-    case 0x09: ADDIU(inst); break;
-    case 0x0A: SLTI(inst); break;
-    case 0x0B: SLTIU(inst); break;
-    case 0x0C: ANDI(inst); break;
-    case 0x0D: ORI(inst); break;
-    case 0x0E: XORI(inst); break;
-    case 0x0F: LUI(inst); break; //rs
-    case 0x20: LB(inst); break;
-    case 0x21: LH(inst); break;
-    case 0x22: LWL(inst); break;
-    case 0x23: LW(inst); break;
-    case 0x24: LBU(inst); break;
-    case 0x25: LHU(inst); break;
-    case 0x26: LWR(inst); break;
-    case 0x28: SB(inst); break;
-    case 0x29: SH(inst); break;
-    case 0x2B: SW(inst); break;
+    case 0x04:cout<<"BEQ"<<endl; BEQ(inst); break;
+    case 0x05:cout<<"BNE"<<endl; BNE(inst); break;
+    case 0x06:cout<<"BLEZ"<<endl; BLEZ(inst); break; //rt
+    case 0x07:cout<<"BGTZ"<<endl; BGTZ(inst); break; //rt
+    case 0x08:cout<<"ADDI"<<endl; ADDI(inst); break;
+    case 0x09:cout<<"ADDIU"<<endl; ADDIU(inst); break;
+    case 0x0A:cout<<"SLTI"<<endl; SLTI(inst); break;
+    case 0x0B:cout<<"SLTIU"<<endl; SLTIU(inst); break;
+    case 0x0C:cout<<"ANDI"<<endl; ANDI(inst); break;
+    case 0x0D:cout<<"ORI"<<endl; ORI(inst); break;
+    case 0x0E:cout<<"XORI"<<endl; XORI(inst); break;
+    case 0x0F:cout<<"LUI"<<endl; LUI(inst); break; //rs
+    case 0x20:cout<<"LB"<<endl; LB(inst); break;
+    case 0x21:cout<<"LH"<<endl; LH(inst); break;
+    case 0x22:cout<<"LWL"<<endl; LWL(inst); break;
+    case 0x23:cout<<"LW"<<endl; LW(inst); break;
+    case 0x24:cout<<"LBU"<<endl; LBU(inst); break;
+    case 0x25:cout<<"LHU"<<endl; LHU(inst); break;
+    case 0x26:cout<<"LWR"<<endl; LWR(inst); break;
+    case 0x28:cout<<"SB"<<endl; SB(inst); break;
+    case 0x29:cout<<"SH"<<endl; SH(inst); break;
+    case 0x2B:cout<<"SW"<<endl; SW(inst); break;
     default: std::cerr << "error: i instruction not implemented" << '\n'; std::exit(-12);
   }
  }
 void cpu::execute_j(const instruction& inst){
   switch (inst.opcode) {
-    case 0x02: J(inst); break;
-    case 0x03: JAL(inst); break;
+    case 0x02:cout<<"J"<<endl; J(inst); break;
+    case 0x03:cout<<"JAL"<<endl; JAL(inst); break;
     default: std::cerr << "error: j instruction not implemented" << '\n'; std::exit(-12);
   }
  }
