@@ -7,6 +7,7 @@
 #include "registers.hpp"
 
 using word = uint32_t;
+using s_word = int32_t;
 
 class cpu{
 public: // change to private
@@ -21,76 +22,74 @@ public: // change to private
 public:
   cpu();
   cpu(std::string binary);
-  void run();
+  void run();//single
+
   //TEST:
   void test_fill();
   void reg_print(bool s_nbr);
   void reg_s();
-private:
+protected:
   void execute  (const instruction& inst);
-  void IF();//IFetch
-  void ID(word next_instruction);//Idecode
-  void EX();//Execute
-  void Mem();//MemAccess  void WB();//WriteBack
+
   void execute_r(const instruction& inst);
   void execute_i(const instruction& inst);
   void execute_j(const instruction& inst);
 
 
   //INSTRUCTIONS
-  void ADD   (const instruction& inst);
-  void ADDI  (const instruction& inst);
-  void ADDIU (const instruction& inst);
-  void ADDU  (const instruction& inst);
-  void AND   (const instruction& inst);
-  void ANDI  (const instruction& inst);
-  void BEQ   (const instruction& inst);
-  void BGEZ  (const instruction& inst);
-  void BGEZAL(const instruction& inst);
-  void BGTZ  (const instruction& inst);
-  void BLEZ  (const instruction& inst);
-  void BLTZ  (const instruction& inst);
-  void BLTZAL(const instruction& inst);
-  void BNE   (const instruction& inst);
-  void DIV   (const instruction& inst);
-  void DIVU  (const instruction& inst);
-  void J     (const instruction& inst);
-  void JALR  (const instruction& inst);
-  void JAL   (const instruction& inst);
-  void JR    (const instruction& inst);
-  void LB    (const instruction& inst);
-  void LBU   (const instruction& inst);
-  void LH    (const instruction& inst);
-  void LHU   (const instruction& inst);
-  void LUI   (const instruction& inst);
-  void LW    (const instruction& inst);
-  void LWL   (const instruction& inst);
-  void LWR   (const instruction& inst);
-  void MFHI  (const instruction& inst);
-  void MFLO  (const instruction& inst);
-  void MTHI  (const instruction& inst);
-  void MTLO  (const instruction& inst);
-  void MULT  (const instruction& inst);
-  void MULTU (const instruction& inst);
-  void OR    (const instruction& inst);
-  void ORI   (const instruction& inst);
-  void SB    (const instruction& inst);
-  void SH    (const instruction& inst);
-  void SLL   (const instruction& inst);
-  void SLLV  (const instruction& inst);
-  void SLT   (const instruction& inst);
-  void SLTI  (const instruction& inst);
-  void SLTIU (const instruction& inst);
-  void SLTU  (const instruction& inst);
-  void SRA   (const instruction& inst);
-  void SRAV  (const instruction& inst);
-  void SRL   (const instruction& inst);
-  void SRLV  (const instruction& inst);
-  void SUB   (const instruction& inst);
-  void SUBU  (const instruction& inst);
-  void SW    (const instruction& inst);
-  void XOR   (const instruction& inst);
-  void XORI  (const instruction& inst);
+  virtual void ADD   (const instruction& inst);
+  virtual void ADDI  (const instruction& inst);
+  virtual void ADDIU (const instruction& inst);
+  virtual void ADDU  (const instruction& inst);
+  virtual void AND   (const instruction& inst);
+  virtual void ANDI  (const instruction& inst);
+  virtual void BEQ   (const instruction& inst);
+  virtual void BGEZ  (const instruction& inst);
+  virtual void BGEZAL(const instruction& inst);
+  virtual void BGTZ  (const instruction& inst);
+  virtual void BLEZ  (const instruction& inst);
+  virtual void BLTZ  (const instruction& inst);
+  virtual void BLTZAL(const instruction& inst);
+  virtual void BNE   (const instruction& inst);
+  virtual void DIV   (const instruction& inst);
+  virtual void DIVU  (const instruction& inst);
+  virtual void J     (const instruction& inst);
+  virtual void JALR  (const instruction& inst);
+  virtual void JAL   (const instruction& inst);
+  virtual void JR    (const instruction& inst);
+  virtual void LB    (const instruction& inst);
+  virtual void LBU   (const instruction& inst);
+  virtual void LH    (const instruction& inst);
+  virtual void LHU   (const instruction& inst);
+  virtual void LUI   (const instruction& inst);
+  virtual void LW    (const instruction& inst);
+  virtual void LWL   (const instruction& inst);
+  virtual void LWR   (const instruction& inst);
+  virtual void MFHI  (const instruction& inst);
+  virtual void MFLO  (const instruction& inst);
+  virtual void MTHI  (const instruction& inst);
+  virtual void MTLO  (const instruction& inst);
+  virtual void MULT  (const instruction& inst);
+  virtual void MULTU (const instruction& inst);
+  virtual void OR    (const instruction& inst);
+  virtual void ORI   (const instruction& inst);
+  virtual void SB    (const instruction& inst);
+  virtual void SH    (const instruction& inst);
+  virtual void SLL   (const instruction& inst);
+  virtual void SLLV  (const instruction& inst);
+  virtual void SLT   (const instruction& inst);
+  virtual void SLTI  (const instruction& inst);
+  virtual void SLTIU (const instruction& inst);
+  virtual void SLTU  (const instruction& inst);
+  virtual void SRA   (const instruction& inst);
+  virtual void SRAV  (const instruction& inst);
+  virtual void SRL   (const instruction& inst);
+  virtual void SRLV  (const instruction& inst);
+  virtual void SUB   (const instruction& inst);
+  virtual void SUBU  (const instruction& inst);
+  virtual void SW    (const instruction& inst);
+  virtual void XOR   (const instruction& inst);
+  virtual void XORI  (const instruction& inst);
 
   //SUB-INSTRUCTION
   void pc_increase(word offset);
@@ -99,5 +98,8 @@ private:
   void test_zero_fields_R(const instruction& inst);
   void test_zero_fields_I(const instruction& inst);
 };
+
+
+
 
 #endif

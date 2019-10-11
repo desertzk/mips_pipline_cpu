@@ -5,8 +5,7 @@
 #include "cpu.hpp"
 #include "instruction.hpp"
 
-using word = uint32_t;
-using s_word = int32_t;
+
 using namespace std;
 
 cpu::cpu(){
@@ -23,17 +22,41 @@ cpu::cpu(std::string binary): m(binary), r() {
   HI = 0;
 }
 
-void cpu::run(){
-  while(true) {
-	  this->IF();
+void cpu::run() {
 
-    this->execute(c_inst);
+	while (true) {
 
-    if(pc == 0){
-      exit(r[2]);
-    }
-  }
+		word next_instruction = m.read_inst(pc);
+
+		instruction c_inst(next_instruction);
+
+
+
+		this->execute(c_inst);
+
+
+
+		if (pc == 0) {
+
+			exit(r[2]);
+
+		}
+
+	}
+
 }
+
+//void cpu::run5stage(){
+//  while(true) {
+//	  word instruct=this->IF();
+//	  instruction c_inst=this->ID(instruct);
+//    this->execute(c_inst);
+//
+//    if(pc == 0){
+//      exit(r[2]);
+//    }
+//  }
+//}
 
 void cpu::pc_increase(word offset){
   pc = npc;
@@ -50,28 +73,30 @@ void cpu::execute(const instruction& inst){
   }
 }
 
-void cpu::IF()
-{
-	word next_instruction = m.read_inst(pc);
-	
-}
-
-void cpu::ID(word next_instruction)
-{
-	instruction c_inst(next_instruction);
-}
-
-void cpu::EX()
-{
-}
-
-void cpu::Mem()
-{
-}
-
-void cpu::WB()
-{
-}
+//word cpu::IF()
+//{
+//	word instruction = m.read_inst(pc);
+//	return instruction;
+//}
+//
+//instruction cpu::ID(word next_instruction)
+//{
+//	instruction inst(next_instruction);
+//	rs = r[inst.src_s];
+//	rt = r[inst.src_t];
+//}
+//
+//void cpu::EX()
+//{
+//}
+//
+//void cpu::Mem()
+//{
+//}
+//
+//void cpu::WB()
+//{
+//}
 
 void cpu::execute_r(const instruction& inst){
 	
