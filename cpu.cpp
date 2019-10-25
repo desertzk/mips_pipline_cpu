@@ -36,7 +36,7 @@ void cpu::run() {
 
 
 
-		if (pc == 0) {
+		if (pc == -1) {
 
 			exit(r[2]);
 

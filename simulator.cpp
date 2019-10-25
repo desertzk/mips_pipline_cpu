@@ -2,6 +2,7 @@
 #include <string>
 #include "memory.hpp"
 #include "cpu.hpp"
+#include "piplinecpu.hpp"
 
 int main(int argc, char const *argv[]) {
   std::string name_bin = "FIB.bin";
@@ -12,9 +13,11 @@ int main(int argc, char const *argv[]) {
   //  exit(-21);
   //}
 
-  cpu c(name_bin);
+  //cpu c(name_bin);
+  //c.run();
 
-  c.run();
+ /**/ piplinecpu c(name_bin);
+  c.run5stage();
 
   return 0;
 }

@@ -145,6 +145,7 @@ word memory::read_w(word adr){
   }
   std::cerr << "error: trying to read word from address: " << adr << '\n';
   std::exit(-11);
+  return 0;
  }
 
 word memory::read_h(word adr){
@@ -177,6 +178,7 @@ word memory::read_h(word adr){
     case 0x0: return (word_data & 0xFFFF0000) >> 16; break;
     case 0x2: return (word_data & 0x0000FFFF);
   }
+  return 0;
 }
 
 word memory::read_b(word adr){
@@ -213,13 +215,24 @@ word memory::read_b(word adr){
   }
 }
 
-word memory::read_inst(int adr){
-  if((adr >= 0x10000000 && adr < 0x11000000) && adr % 4 == 0){
-    int index = (adr - 0x10000000) / 4;
-    return (*inst)[index];
-  }
-  std::cerr << "error: trying to read instruction from address: " << adr << '\n';
-  std::exit(-11);
+//word memory::read_inst(int adr){
+//  if((adr >= 0x10000000 && adr < 0x11000000) && adr % 4 == 0){
+//    int index = (adr - 0x10000000) / 4;
+//    return (*inst)[index];
+//  }
+//  std::cerr << "error: trying to read instruction from address: " << adr << '\n';
+//  std::exit(-11);
+//}
+
+word memory::read_inst(int adr) {
+	if ((adr >= 0x10000000 && adr < 0x11000000) && adr % 4 == 0) {
+		int index = (adr - 0x10000000) / 4;
+		return (*inst)[index];
+	}
+	else {
+		return -1;
+	}
+
 }
 
 void memory::print_mem() const{

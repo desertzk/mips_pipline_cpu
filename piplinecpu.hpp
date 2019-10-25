@@ -1,12 +1,14 @@
 #pragma once
 #include"cpu.hpp"
+#include<thread>
+#include<queue>
+#include <mutex>
 
 class piplinecpu :public cpu {
 public: // change to private
 
 
-	s_word rs;
-	s_word rt;
+	
 public:
 	piplinecpu();
 	piplinecpu(std::string binary);
@@ -15,68 +17,103 @@ public:
 	//TEST:
 
 public:
+	long long cycle;
+	long long ifcycle;
+	void CycleControl();
+	void IF();//IFetch
+	void ID();//Idecode
+	void EX();//Execute
+	void Mem();//MemAccess
 	
-	word IF();//IFetch
-	instruction ID(word next_instruction);//Idecode
-	void EX(const instruction&);//Execute
-	void Mem();//MemAccess	
-
 	void WB();
+	std::mutex mutcycle;
+	std::condition_variable cvcycle;
+
+	std::queue<word> queue_if;
+	std::mutex mutif;
+	//std::condition_variable cvcycle;
+
+	//instruction rs rt
+	std::queue<tuple<instruction, s_word, s_word>> queue_id;
+	std::mutex mutid;
+	//std::condition_variable cvid;
+
+	std::queue<instruction> queue_ex;
+	std::mutex mutex;
+	//std::condition_variable cvex;
+	//std::queue<word> queue_ex;
+
+	std::queue<std::tuple<std::string,word,word>> queue_mem;
+	std::mutex mutmem;
+	//std::condition_variable cvmem;
+
+	std::queue<word> queue_wb;
+	//std::mutex mutwb;
+	//std::condition_variable cvwb;
+	virtual void execute_r(const instruction& inst, s_word rs, s_word rt);
+	virtual void execute_i(const instruction& inst, s_word rs, s_word rt);
+	virtual void execute_j(const instruction& inst, s_word rs, s_word rt);
+
+    bool is_ex=false;
 
 	//INSTRUCTIONS
-	void ADD(const instruction& inst);
-	void ADDI(const instruction& inst);
-	void ADDIU(const instruction& inst);
-	void ADDU(const instruction& inst);
-	void AND(const instruction& inst);
-	void ANDI(const instruction& inst);
-	void BEQ(const instruction& inst);
-	void BGEZ(const instruction& inst);
-	void BGEZAL(const instruction& inst);
-	void BGTZ(const instruction& inst);
-	void BLEZ(const instruction& inst);
-	void BLTZ(const instruction& inst);
-	void BLTZAL(const instruction& inst);
-	void BNE(const instruction& inst);
-	void DIV(const instruction& inst);
-	void DIVU(const instruction& inst);
-	void J(const instruction& inst);
-	void JALR(const instruction& inst);
-	void JAL(const instruction& inst);
-	void JR(const instruction& inst);
-	void LB(const instruction& inst);
-	void LBU(const instruction& inst);
-	void LH(const instruction& inst);
-	void LHU(const instruction& inst);
-	void LUI(const instruction& inst);
-	void LW(const instruction& inst);
-	void LWL(const instruction& inst);
-	void LWR(const instruction& inst);
-	void MFHI(const instruction& inst);
-	void MFLO(const instruction& inst);
-	void MTHI(const instruction& inst);
-	void MTLO(const instruction& inst);
-	void MULT(const instruction& inst);
-	void MULTU(const instruction& inst);
-	void OR(const instruction& inst);
-	void ORI(const instruction& inst);
-	void SB(const instruction& inst);
-	void SH(const instruction& inst);
-	void SLL(const instruction& inst);
-	void SLLV(const instruction& inst);
-	void SLT(const instruction& inst);
-	void SLTI(const instruction& inst);
-	void SLTIU(const instruction& inst);
-	void SLTU(const instruction& inst);
-	void SRA(const instruction& inst);
-	void SRAV(const instruction& inst);
-	void SRL(const instruction& inst);
-	void SRLV(const instruction& inst);
-	void SUB(const instruction& inst);
-	void SUBU(const instruction& inst);
-	void SW(const instruction& inst);
-	void XOR(const instruction& inst);
-	void XORI(const instruction& inst);
+	void ADD(const instruction& inst, s_word rs, s_word rt);
+	void ADDI(const instruction& inst, s_word rs, s_word rt);
+	void ADDIU(const instruction& inst, s_word rs, s_word rt);
+	void ADDU(const instruction& inst, s_word rs, s_word rt);
+	void AND(const instruction& inst, s_word rs, s_word rt);
+	void ANDI(const instruction& inst, s_word rs, s_word rt);
+	void BEQ(const instruction& inst, s_word rs, s_word rt);
+	void BGEZ(const instruction& inst, s_word rs, s_word rt);
+	void BGEZAL(const instruction& inst, s_word rs, s_word rt);
+	void BGTZ(const instruction& inst, s_word rs, s_word rt);
+	void BLEZ(const instruction& inst, s_word rs, s_word rt);
+	void BLTZ(const instruction& inst, s_word rs, s_word rt);
+	void BLTZAL(const instruction& inst, s_word rs, s_word rt);
+	void BNE(const instruction& inst, s_word rs, s_word rt);
+	void DIV(const instruction& inst, s_word rs, s_word rt);
+	void DIVU(const instruction& inst, s_word rs, s_word rt);
+	void J(const instruction& inst, s_word rs, s_word rt);
+	void JALR(const instruction& inst, s_word rs, s_word rt);
+	void JAL(const instruction& inst, s_word rs, s_word rt);
+	void JR(const instruction& inst, s_word rs, s_word rt);
+	//void LB(const instruction& inst, s_word rs, s_word rt);
+	//void LBU(const instruction& inst, s_word rs, s_word rt);
+	void LH(const instruction& inst, s_word rs, s_word rt);
+	void LH_mem(word res);
+	void LH_wb(int src_t, word res);
 
+	//void LHU(const instruction& inst, s_word rs, s_word rt);
+	void LUI(const instruction& inst, s_word rs, s_word rt);
+	//void LW(const instruction& inst, s_word rs, s_word rt);
+	//void LWL(const instruction& inst, s_word rs, s_word rt);
+	//void LWR(const instruction& inst, s_word rs, s_word rt);
+	void MFHI(const instruction& inst, s_word rs, s_word rt);
+	void MFLO(const instruction& inst, s_word rs, s_word rt);
+	void MTHI(const instruction& inst, s_word rs, s_word rt);
+	void MTLO(const instruction& inst, s_word rs, s_word rt);
+	void MULT(const instruction& inst, s_word rs, s_word rt);
+	void MULTU(const instruction& inst, s_word rs, s_word rt);
+	void OR(const instruction& inst, s_word rs, s_word rt);
+	void ORI(const instruction& inst, s_word rs, s_word rt);
+	void SB(const instruction& inst, s_word rs, s_word rt);
+	void SH(const instruction& inst, s_word rs, s_word rt);
+	void SLL(const instruction& inst, s_word rs, s_word rt);
+	void SLLV(const instruction& inst, s_word rs, s_word rt);
+	void SLT(const instruction& inst, s_word rs, s_word rt);
+	void SLTI(const instruction& inst, s_word rs, s_word rt);
+	void SLTIU(const instruction& inst, s_word rs, s_word rt);
+	void SLTU(const instruction& inst, s_word rs, s_word rt);
+	void SRA(const instruction& inst, s_word rs, s_word rt);
+	void SRAV(const instruction& inst, s_word rs, s_word rt);
+	void SRL(const instruction& inst, s_word rs, s_word rt);
+	void SRLV(const instruction& inst, s_word rs, s_word rt);
+	void SUB(const instruction& inst, s_word rs, s_word rt);
+	void SUBU(const instruction& inst, s_word rs, s_word rt);
 
+	void SW(const instruction& inst, s_word rs, s_word rt);
+	void XOR(const instruction& inst, s_word rs, s_word rt);
+	void XORI(const instruction& inst, s_word rs, s_word rt);
+
+	bool is_finish;
 };

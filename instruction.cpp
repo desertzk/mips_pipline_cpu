@@ -30,7 +30,8 @@ instruction::instruction(){
   j_add = 0;
 }
 
-instruction::instruction(word inst):bin(inst){
+instruction::instruction(word inst):bin(inst), opcode(0), src_s(0), src_t(0), destn(0), shamt(0), funct(0), i_imi(0), j_add(0){
+	
   opcode = inst >> 26;
   if(is_R_type(opcode)){
     type = 'r';
