@@ -13,11 +13,11 @@ int main(int argc, char const *argv[]) {
   //  exit(-21);
   //}
 
-  cpu c(name_bin);
-  c.run();
+  /*cpu c(name_bin);
+  c.run();*/
 
- /* piplinecpu c(name_bin);
-  c.run5stage();*/
+  piplinecpu c(name_bin);
+  c.run5stage();
 
   return 0;
 }

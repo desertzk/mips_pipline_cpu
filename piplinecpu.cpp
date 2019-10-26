@@ -139,7 +139,7 @@ void piplinecpu::CycleControl()
 		std::this_thread::sleep_for(2ms);
 		unique_lock<std::mutex> lk(mutcycle);
 		++cycle;
-		//cout << "===============================" << cycle << "=================================" << endl;
+		cout << "===============================" << cycle << "=================================" << endl;
 		cvcycle.notify_all();
 		//std::this_thread::sleep_for(3s);
 		
@@ -223,7 +223,7 @@ void piplinecpu::EX() {
 		}
 		queue_id.pop();
 		std::lock_guard<std::mutex> lock(mutex);
-		
+		cout << "register[29] "<< r[29] <<" register[30]" << r[30]<<endl;
 		queue_ex.push(inst);
 		//cvex.notify_one();
 		//cvcycle.notify_one();
@@ -611,7 +611,9 @@ void piplinecpu::OR(const instruction& inst, s_word rs, s_word rt) {
 }
 void piplinecpu::ORI(const instruction& inst, s_word rs, s_word rt) {
 	word r1 = rs;
+
 	word res = r1 | inst.i_imi;
+	cout << "r1:" << r1 << "inst.i_imi: "<< inst.i_imi<<"res:"<< res <<endl;
 	r[inst.src_t] = res;
 	//pc_increase(4);
 }

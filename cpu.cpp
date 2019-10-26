@@ -33,7 +33,7 @@ void cpu::run() {
 
 
 		this->execute(c_inst);
-
+		cout << "register[29] " << r[29] << " register[30]" << r[30] << endl;
 
 
 		if (pc == -1) {
