@@ -34,7 +34,7 @@ public:
 	//std::condition_variable cvcycle;
 
 	//instruction rs rt
-	std::queue<tuple<instruction, s_word, s_word>> queue_id;
+	std::queue<std::tuple<instruction, s_word, s_word>> queue_id;
 	std::mutex mutid;
 	//std::condition_variable cvid;
 
@@ -77,17 +77,17 @@ public:
 	void JALR(const instruction& inst, s_word rs, s_word rt);
 	void JAL(const instruction& inst, s_word rs, s_word rt);
 	void JR(const instruction& inst, s_word rs, s_word rt);
-	//void LB(const instruction& inst, s_word rs, s_word rt);
-	//void LBU(const instruction& inst, s_word rs, s_word rt);
+	void LB(const instruction& inst, s_word rs, s_word rt);
+	void LBU(const instruction& inst, s_word rs, s_word rt);
 	void LH(const instruction& inst, s_word rs, s_word rt);
 	void LH_mem(word res);
 	void LH_wb(int src_t, word res);
 
-	//void LHU(const instruction& inst, s_word rs, s_word rt);
+	void LHU(const instruction& inst, s_word rs, s_word rt);
 	void LUI(const instruction& inst, s_word rs, s_word rt);
-	//void LW(const instruction& inst, s_word rs, s_word rt);
-	//void LWL(const instruction& inst, s_word rs, s_word rt);
-	//void LWR(const instruction& inst, s_word rs, s_word rt);
+	void LW(const instruction& inst, s_word rs, s_word rt);
+	void LWL(const instruction& inst, s_word rs, s_word rt);
+	void LWR(const instruction& inst, s_word rs, s_word rt);
 	void MFHI(const instruction& inst, s_word rs, s_word rt);
 	void MFLO(const instruction& inst, s_word rs, s_word rt);
 	void MTHI(const instruction& inst, s_word rs, s_word rt);

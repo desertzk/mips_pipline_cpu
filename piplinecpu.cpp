@@ -1,4 +1,4 @@
-#include"piplinecpu.hpp"
+﻿#include"piplinecpu.hpp"
 
 #include <string>
 #include <iostream> //debug
@@ -9,14 +9,14 @@
 
 using namespace std;
 
-piplinecpu::piplinecpu(): cpu(),rs(0),rt(0), is_finish(false){
+piplinecpu::piplinecpu(): cpu(), is_finish(false){
 	pc = 0x10000000;
 	npc = 0x10000004;
 	LO = 0;
 	HI = 0;
 }
 
-piplinecpu::piplinecpu(std::string binary) :cpu(binary), rs(0), rt(0), is_finish(false) {
+piplinecpu::piplinecpu(std::string binary) :cpu(binary), is_finish(false) {
 	pc = 0x10000000;
 	npc = 0x10000004;
 	LO = 0;
@@ -50,14 +50,96 @@ void piplinecpu::run5stage() {
 }
 
 
+
+void piplinecpu::execute_r(const instruction& inst, s_word rs, s_word rt) {
+
+	switch (inst.funct) {
+	case 0x00: cout << "SLL" << endl; SLL(inst, rs, rt); break;  //rs
+	case 0x02: cout << "SRL" << endl; SRL(inst, rs, rt); break;  //rs
+	case 0x03: cout << "SRA" << endl; SRA(inst, rs, rt); break;  //rs
+	case 0x04: cout << "SLLV" << endl; SLLV(inst, rs, rt); break; // TODO: dodalem to nie wiem czy gdzies jescze trzeba cos zmienic
+	case 0x06: cout << "SRLV" << endl; SRLV(inst, rs, rt); break;
+	case 0x07: cout << "SRAV" << endl; SRAV(inst, rs, rt); break; //shamt
+	case 0x08: cout << "JR" << endl; JR(inst, rs, rt); break;   //rt,rd
+	case 0x09: cout << "JALR" << endl; JALR(inst, rs, rt); break; //rt
+	case 0x10: cout << "MFHI" << endl; MFHI(inst, rs, rt); break; //rs,rt
+	case 0x11: cout << "MTHI" << endl; MTHI(inst, rs, rt); break; //rt,rd,shamt
+	case 0x12: cout << "MFLO" << endl; MFLO(inst, rs, rt); break; //rs,rt
+	case 0x13: cout << "MTLO" << endl; MTLO(inst, rs, rt); break; //rt,rd,shamt
+	case 0x18: cout << "MULT" << endl; MULT(inst, rs, rt); break; //rd,shamt
+	case 0x19: cout << "MULTU" << endl; MULTU(inst, rs, rt); break; //rd,shamt
+	case 0x1A: cout << "DIV" << endl; DIV(inst, rs, rt); break; //rd,shamt
+	case 0x1B: cout << "DIVU" << endl; DIVU(inst, rs, rt); break; //rd,shamt
+	case 0x20: cout << "ADD" << endl; ADD(inst, rs, rt); break;  //shamt
+	case 0x21: cout << "ADDU" << endl; ADDU(inst, rs, rt); break; //shamt
+	case 0x22: cout << "SUB" << endl; SUB(inst, rs, rt); break; //shamt
+	case 0x23: cout << "SUBU" << endl; SUBU(inst, rs, rt); break; //shamt
+	case 0x24: cout << "AND" << endl; AND(inst, rs, rt); break; //shamt
+	case 0x25: cout << "OR" << endl; OR(inst, rs, rt); break; //shamt
+	case 0x26: cout << "XOR" << endl; XOR(inst, rs, rt); break; //shamt
+	case 0x2A: cout << "SLT" << endl; SLT(inst, rs, rt); break; //shamt
+	case 0x2B: cout << "SLTU" << endl; SLTU(inst, rs, rt); break; //shamt
+
+	default: std::cerr << "error: r instruction not implemented" << '\n'; std::exit(-12);
+	}
+}
+
+void piplinecpu::execute_i(const instruction& inst, s_word rs, s_word rt) {
+	//test_zero_fields_I(inst);
+	switch (inst.opcode) {
+	case 0x01: { //branches
+		switch (inst.src_t) {
+		case 0x00:cout << "BLTZ" << endl; BLTZ(inst, rs, rt); break;
+		case 0x01:cout << "BGEZ" << endl; BGEZ(inst, rs, rt); break;
+		case 0x10:cout << "BLTZAL" << endl; BLTZAL(inst, rs, rt); break;
+		case 0x11:cout << "BGEZAL" << endl; BGEZAL(inst, rs, rt); break;
+		default: std::cerr << "error: i inst, rs, rtruction not implemented" << '\n'; std::exit(-12);
+		}
+	} break;
+	case 0x04:cout << "BEQ" << endl; BEQ(inst, rs, rt); break;
+	case 0x05:cout << "BNE" << endl; BNE(inst, rs, rt); break;
+	case 0x06:cout << "BLEZ" << endl; BLEZ(inst, rs, rt); break; //rt
+	case 0x07:cout << "BGTZ" << endl; BGTZ(inst, rs, rt); break; //rt
+	case 0x08:cout << "ADDI" << endl; ADDI(inst, rs, rt); break;
+	case 0x09:cout << "ADDIU" << endl; ADDIU(inst, rs, rt); break;
+	case 0x0A:cout << "SLTI" << endl; SLTI(inst, rs, rt); break;
+	case 0x0B:cout << "SLTIU" << endl; SLTIU(inst, rs, rt); break;
+	case 0x0C:cout << "ANDI" << endl; ANDI(inst, rs, rt); break;
+	case 0x0D:cout << "ORI" << endl; ORI(inst, rs, rt); break;
+	case 0x0E:cout << "XORI" << endl; XORI(inst, rs, rt); break;
+	case 0x0F:cout << "LUI" << endl; LUI(inst, rs, rt); break; //rs
+	case 0x20:cout << "LB" << endl; LB(inst, rs, rt); break;
+	case 0x21:cout << "LH" << endl; LH(inst, rs, rt); break;
+	case 0x22:cout << "LWL" << endl; LWL(inst, rs, rt); break;
+	case 0x23:cout << "LW" << endl; LW(inst, rs, rt); break;
+	case 0x24:cout << "LBU" << endl; LBU(inst, rs, rt); break;
+	case 0x25:cout << "LHU" << endl; LHU(inst, rs, rt); break;
+	case 0x26:cout << "LWR" << endl; LWR(inst, rs, rt); break;
+	case 0x28:cout << "SB" << endl; SB(inst, rs, rt); break;
+	case 0x29:cout << "SH" << endl; SH(inst, rs, rt); break;
+	case 0x2B:cout << "SW" << endl; SW(inst, rs, rt); break;
+	default: std::cerr << "error: i instruction not implemented" << '\n'; std::exit(-12);
+	}
+}
+
+
+void piplinecpu::execute_j(const instruction& inst, s_word rs, s_word rt) {
+	switch (inst.opcode) {
+	case 0x02:cout << "J" << endl; J(inst, rs, rt); break;
+	case 0x03:cout << "JAL" << endl; JAL(inst, rs, rt); break;
+	default: std::cerr << "error: j instruction not implemented" << '\n'; std::exit(-12);
+	}
+}
+
+
 void piplinecpu::CycleControl()
 {
 	while (!is_finish)
 	{
-		std::this_thread::sleep_for(500ms);
+		std::this_thread::sleep_for(2ms);
 		unique_lock<std::mutex> lk(mutcycle);
 		++cycle;
-		cout << "===============================" << cycle << "=================================" << endl;
+		//cout << "===============================" << cycle << "=================================" << endl;
 		cvcycle.notify_all();
 		//std::this_thread::sleep_for(3s);
 		
@@ -72,7 +154,9 @@ void piplinecpu::IF()
 	{
 		unique_lock<std::mutex> lk(mutcycle);
 		cvcycle.wait(lk, [this] {return cycle> ifcycle; });
-		
+		if (queue_if.size() > 1)
+			std::this_thread::sleep_for(1ms);
+
 		word instruction = m.read_inst(pc);
 		if (instruction == -1/*|| instruction == 0*/)
 		{
@@ -85,7 +169,7 @@ void piplinecpu::IF()
 		std::lock_guard<std::mutex> lock(mutif);
 		queue_if.push(instruction);
 		++ifcycle;
-		cvcycle.notify_one();
+		//cvcycle.notify_one();
 	}
 
 	//return instruction;
@@ -99,17 +183,20 @@ void piplinecpu::ID()
 		unique_lock<std::mutex> lk(mutcycle);
 		cvcycle.wait(lk, [this] {return queue_if.size()>0; });
 		
+		if (queue_id.size() > 1)
+			std::this_thread::sleep_for(1ms);
+
 		word next_instruction = queue_if.front();
 		queue_if.pop();
 		//mutif.unlock();
 
 		instruction inst(next_instruction);
-		s_word rs = r[inst.src_s];
-		s_word rt = r[inst.src_t];
+		s_word rsval = r[inst.src_s];
+		s_word rtval = r[inst.src_t];
 		cout << "Id:" << inst << endl;
 		std::lock_guard<std::mutex> lock(mutid);
-		queue_id.push(make_tuple(inst, rs,rt));
-		cvcycle.notify_one();
+		queue_id.push(make_tuple(inst, rsval, rtval));
+		//cvcycle.notify_one();
 	}
 	
 }
@@ -120,9 +207,9 @@ void piplinecpu::EX() {
 		unique_lock<std::mutex> lk(mutcycle);
 		cvcycle.wait(lk, [this] {return queue_id.size() > 0; });
 		instruction inst = get<0>(queue_id.front());
-		s_word rs= get<1>(queue_id.front());
+		s_word rs = get<1>(queue_id.front());
 		s_word rt= get<2>(queue_id.front());
-		queue_id.pop();
+		
 		//mutid.unlock();
 		cout <<"EX:" << inst<<endl;
 		switch (inst.type) {
@@ -134,12 +221,12 @@ void piplinecpu::EX() {
 		
 
 		}
-
+		queue_id.pop();
 		std::lock_guard<std::mutex> lock(mutex);
 		
 		queue_ex.push(inst);
 		//cvex.notify_one();
-		cvcycle.notify_one();
+		//cvcycle.notify_one();
 	}
 }
 
@@ -349,12 +436,12 @@ void piplinecpu::JR(const instruction& inst, s_word rs, s_word rt) {
 	npc = jump_address;
 }
 
-/*void piplinecpu::LB(const instruction& inst, s_word rs, s_word rt) {
+void piplinecpu::LB(const instruction& inst, s_word rs, s_word rt) {
 	s_word base = rs;
 	s_word offset = sign_extend_imi(inst);
 	word adr = base + offset;
 	
-	//word res = m.read_b(adr);
+	word res = m.read_b(adr);
 	queue_mem.push(make_tuple("rb", adr, 0));
 	if (res >= 0x80) res = 0xFFFFFF00 | res;
 	//wb
@@ -366,11 +453,11 @@ void piplinecpu::LBU(const instruction& inst, s_word rs, s_word rt) {
 	s_word base = rs;
 	s_word offset = sign_extend_imi(inst);
 	word adr = base + offset;
-	//word res = m.read_b(adr);
+	word res = m.read_b(adr);
 	queue_mem.push(make_tuple("rb", adr, 0));
 	r[inst.src_t] = res;
 	//pc_increase(4);
-}*/
+}/**/
 
 void piplinecpu::LH(const instruction& inst, s_word rs, s_word rt) {
 	s_word base = rs;
@@ -403,31 +490,31 @@ void piplinecpu::LH_wb(int src_t,word res) {
 	//pc_increase(4);
 }
 
-/*
+
 void piplinecpu::LHU(const instruction& inst, s_word rs, s_word rt) {
 	s_word base = rs;
 	s_word offset = sign_extend_imi(inst);
 	word adr = base + offset;
-	//word res = m.read_h(adr);
+	word res = m.read_h(adr);
 	queue_mem.push(make_tuple("rh", adr, 0));
 	//wb
 	r[inst.src_t] = res;
 	//pc_increase(4);
 }
-*/
+/**/
 void piplinecpu::LUI(const instruction& inst, s_word rs, s_word rt) {
 	word data = inst.i_imi << 16;
 	//wb
 	r[inst.src_t] = data;
 	//pc_increase(4);
 }
-/*
+
 void piplinecpu::LW(const instruction& inst, s_word rs, s_word rt) {
 	s_word base = rs;
 	s_word offset = sign_extend_imi(inst);
 	word adr = base + offset;
 	//mem
-	//word res = m.read_w(adr);
+	word res = m.read_w(adr);
 	queue_mem.push(make_tuple("rw", adr,0));
 	//wb
 	r[inst.src_t] = res;
@@ -440,7 +527,7 @@ void piplinecpu::LWL(const instruction& inst, s_word rs, s_word rt) {
 	//word w_adr = (word) ((base + offset) - (base + offset) % 4);
 	word w_adr = (base + offset) - (base + offset) % 4;
 
-	//word full_word = m.read_w(w_adr);
+	word full_word = m.read_w(w_adr);
 	queue_mem.push(make_tuple("rw", w_adr, 0));
 	word res = r[inst.src_t];
 	int w_off = offset & 0x3;
@@ -461,7 +548,7 @@ void piplinecpu::LWR(const instruction& inst, s_word rs, s_word rt) {
 	//word w_adr = (word) ((base + offset) - (base + offset) % 4);
 	word w_adr = (base + offset) - (base + offset) % 4;
 
-	//word full_word = m.read_w(w_adr);
+	word full_word = m.read_w(w_adr);
 	queue_mem.push(make_tuple("rw", w_adr, 0));
 	word res = rt;
 	int w_off = offset & 0x3;
@@ -475,7 +562,7 @@ void piplinecpu::LWR(const instruction& inst, s_word rs, s_word rt) {
 	r[inst.src_t] = res;
 	//pc_increase(4);
 }
-*/
+/**/
 void piplinecpu::MFHI(const instruction& inst, s_word rs, s_word rt) {
 	word data = HI;
 	//wb

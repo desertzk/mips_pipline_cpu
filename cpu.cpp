@@ -1,4 +1,4 @@
-#include <string>
+﻿#include <string>
 #include <iostream> //debug
 #include <stdexcept> //std::exit
 
@@ -178,6 +178,7 @@ void cpu::execute_j(const instruction& inst){
 
 word cpu::sign_extend_imi(const instruction& inst){
   word imi = inst.i_imi;
+  //取高16位
   return (imi >= 0x8000) ? (0xFFFF0000 | imi) : imi;
  }
 

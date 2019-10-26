@@ -1,4 +1,4 @@
-#ifndef INSTRUCTION_HPP
+﻿#ifndef INSTRUCTION_HPP
 #define INSTRUCTION_HPP
 #include <iostream>
 #include <cstdint>    //using
@@ -9,9 +9,9 @@ using word = uint32_t;
 class instruction{
 public:
   int opcode;
-  int src_s, src_t, destn;
-  int shamt;
-  int funct;
+  int src_s, src_t, destn;//rs rt
+  int shamt;//位移量
+  int funct; //功能码
   int i_imi;
   int j_add;
   char type;
