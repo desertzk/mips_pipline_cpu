@@ -52,6 +52,7 @@ memory::~memory(){
 }
 
 void memory::write_w(word adr, word new_data){
+	std::cout << "write from:" << adr<<" newdata:"<< new_data;
   if(adr >= 0x20000000 && adr < 0x24000000 && adr % 4 == 0){
     int index = (adr - 0x20000000) >> 2;
     if(index >= data->size())
@@ -127,6 +128,7 @@ void memory::write_b(word adr, word new_data){
 }
 
 word memory::read_w(word adr){
+	std::cout << "read from:" << adr;
   if((adr >= 0x20000000 && adr < 0x24000000) && adr % 4 == 0){
     int index = (int) (adr - 0x20000000) / 4;
     if(index >= data->size()) return 0;

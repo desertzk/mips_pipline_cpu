@@ -27,7 +27,9 @@ public:
 	
 	void WB();
 	std::mutex mutcycle;
+	std::mutex mutcycledone;
 	std::condition_variable cvcycle;
+	std::condition_variable cvcycledone;
 
 	std::queue<word> queue_if;
 	std::mutex mutif;

@@ -23,7 +23,7 @@ cpu::cpu(std::string binary): m(binary), r() {
 }
 
 void cpu::run() {
-
+	int cycle = 0;
 	while (true) {
 
 		word next_instruction = m.read_inst(pc);
@@ -33,8 +33,9 @@ void cpu::run() {
 
 
 		this->execute(c_inst);
-		cout << "register[29] " << r[29] << " register[30]" << r[30] << endl;
-
+		cout << "cycle :" << ++cycle << "pc:" << pc <<" npc:"<<npc << endl;
+		
+		cout << "register[0] " << r[0] << "register[2] " << r[2] << "register[29] " << r[29] << " register[30]" << r[30] << endl;
 
 		if (pc == -1) {
 
